@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E# interpreter</title>
 </head>
+
 <body>
+    <textarea name="code" id="code" cols="30" rows="10" placeholder="Enter your code here"></textarea>
+    <br>
+    <button id="execute" onclick="executeCode()">Run code</button>
+    <pre id="console"></pre>
     <script src="./esharp.js"></script>
 </body>
+
 </html>
