@@ -1,79 +1,25 @@
 <!DOCTYPE html>
 <html>
-    
-    <head>
-        <title>Wescril Interpreter</title>
-        <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light" rel='stylesheet' type='text/css'>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="./js/jquery.min.js"></script>
-        <script src="./js/bootstrap.min.js"></script>
-        <script src="./js/jquery-ui.min.js"></script>
-        <script src="./compiler.js"></script>
-        <script src="./logic.js"></script>
-    <style>
-        *,
-        *:hover,
-        *:focus,
-        *:active {
-            outline: none;
-        }
 
-        #output {
-            font: 700 1.0em 'Hack', 'Fira Code', 'Inconsolata', 'Bitstream Vera Sans Mono', 'monospace', 'Courier New', Courier, Fixed;
-            font-weight: 700;
-            font-size: 1.0em;
-            width: 100%;
-            background-color: #000000;
-            color: #00ff00;
-            padding: 5px;
-            margin: auto;
-            user-select: none;
-        }
-
-        h1 {
-            font-family: 'Josefin Sans Std Light', arial, serif;
-            border-width: 2px;
-            border-bottom: 1px solid;
-        }
-
-        body {
-            margin: 10px;
-            font: 400 1em 'Cantarell', Verdana, Helvetica, sans-serif;
-            line-height: 1.5em;
-        }
-
-        #inputform {
-            display: inline;
-        }
-
-        .inputtext {
-            color: #6c6cff;
-        }
-
-        #helptext {
-            border: 1px solid;
-            margin: 10px;
-            padding: 10px;
-            background-color: #dddddd;
-        }
-
-        .example {
-            border: 1px dotted;
-            padding: 20px;
-
-        }
-    </style>
+<head>
+    <title>Wescril Interpreter</title>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light" rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+    <script src="./compiler.js"></script>
+    <script src="./logic.js"></script>
 </head>
 
 <body>
     <h1>Wescril Interpreter Online</h1>
     <h2>Help</h2>
     <div id="showhelp">
-        <form id="showhelpform" name="help"
-            onSubmit="if (!window.__cfRLUnblockHandlers) return false; return togglehelp(this);"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="thelp" type="submit" id="showhelptext"
-                value="Show Help"></form>
+        <form id="showhelpform" name="help" onSubmit="return togglehelp(this);"><input name="thelp" type="submit"
+                id="showhelptext" value="Show Help"></form>
     </div>
     <div id="helptext">
         <h3>Keywords</h3>
@@ -90,19 +36,17 @@
         <p>Here are some code that you can run</p>
         <h4>I/O Example</h4>
         <p>Example to show how <code>INPUT</code> is displayed as HTML Form</p>
-        <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p0');"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="cp" type="submit"
-                value="Copy To Source Code Box"></form>
+        <form name="help" onSubmit="return copy_code('p0');">
+            <input name="cp" type="submit" value="Copy To Source Code Box"></form>
         <pre id="p0" class="example">10 INPUT "What is your name?", NAME$
-                20 INPUT "Input a number ", A
-                30 FOR I=1 TO A
-                40 PRINT "Hello "; NAME$
-                50 NEXT I
+20 INPUT "Input a number ", A
+30 FOR I=1 TO A
+40 PRINT "Hello "; NAME$
+50 NEXT I
             </pre>
         <h4>Reverse Phrase</h4>
         <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a> (unmodified source).</p>
-        <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p1a');"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="cp" type="submit"
+        <form name="help" onSubmit="return copy_code('p1a');"><input name="cp" type="submit"
                 value="Copy To Source Code Box"></form>
         <pre id="p1a" class="example">10 REM Reverse the letters of a phrase
 20 CLEAR :KEY OFF :CLS
@@ -115,8 +59,7 @@
         </pre>
         <h4>Armstrong Numbers</h4>
         <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a>.</p>
-        <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p1b');"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="cp" type="submit"
+        <form name="help" onSubmit="return copy_code('p1b');" data-cf-modified- -=""><input name="cp" type="submit"
                 value="Copy To Source Code Box"></form>
         <pre id="p1b" class="example">10 ' PROGRAM Armstrong Numbers
 20 CLS
@@ -149,8 +92,7 @@
         <h4>99 Bottles of beer</h4>
         <p>Slightly modified from <a href="http://99-bottles-of-beer.net/language-apple-1-basic-1720.html">basic version
                 for apple 1 basic</a> (I changed # to &lt;&gt;).</p>
-        <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p2');"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="cp" type="submit"
+        <form name="help" onSubmit="return copy_code('p2');" data-cf-modified- -=""><input name="cp" type="submit"
                 value="Copy To Source Code Box"></form>
         <pre id="p2" class="example">1 REM A SUBSTANTIAL PART TAKEN
 2 REM FROM THE BASIC EXAMPLE.
