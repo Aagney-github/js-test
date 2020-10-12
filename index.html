@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light" rel='stylesheet' type='text/css'>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="./js/jquery.min.js"></script>
-    <script src="./esharp.js"></script>
-    <title>Simple Basic Interpreter</title>
-    <style type="text/css">
+    
+    <head>
+        <title>Wescril Interpreter</title>
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light" rel='stylesheet' type='text/css'>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="./js/jquery.min.js"></script>
+        <script src="./js/bootstrap.min.js"></script>
+        <script src="./js/jquery-ui.min.js"></script>
+        <script src="./compiler.js"></script>
+        <script src="./logic.js"></script>
+    <style>
+        *,
+        *:hover,
+        *:focus,
+        *:active {
+            outline: none;
+        }
+
         #output {
-            font: 700 1.0em 'Inconsolata', 'Bitstream Vera Sans Mono', 'monospace', 'Courier New', Courier, Fixed;
+            font: 700 1.0em 'Hack', 'Fira Code', 'Inconsolata', 'Bitstream Vera Sans Mono', 'monospace', 'Courier New', Courier, Fixed;
             font-weight: 700;
             font-size: 1.0em;
             width: 100%;
             background-color: #000000;
-            color: #00ff00
+            color: #00ff00;
+            padding: 5px;
+            margin: auto;
+            user-select: none;
         }
 
         h1 {
@@ -25,7 +39,6 @@
 
         body {
             margin: 10px;
-
             font: 400 1em 'Cantarell', Verdana, Helvetica, sans-serif;
             line-height: 1.5em;
         }
@@ -35,7 +48,7 @@
         }
 
         .inputtext {
-            color: blue;
+            color: #6c6cff;
         }
 
         #helptext {
@@ -54,168 +67,7 @@
 </head>
 
 <body>
-    <h1>Simple Web Basic</h1>
-    Copyright &copy; 2010 <a href="https://yohan.es">Yohanes Nugroho</a>
-    <p>This is a simple implementation of unstructured BASIC (uses line numbers) in JavaScript. You can type in your
-        source code, and run it in your browser. <code>INPUT</code> statement will become HTML input form. The source
-        code is <a href="main.js">here</a>.</p>
-    <p>Click <a href="https://yohan.es/applications/">here</a> to see other things that I've made.</p>
-    <p>Other BASIC/JavaScript projects by other people:</p>
-    <ul>
-        <li><a href="http://www.quitebasic.com/">Quite Basic</a>, supports preliminary graphics, doesn't support INPUT.
-        </li>
-        <li><a href="http://www.ngbasic.com/">ngbasic</a>, has been developed for 3 years. Very complete implementation
-            (uses screen emulation instead of web forms like my implementation).</li>
-        <li><a href="http://www.calormen.com/applesoft/"> AppleSoft BASIC interpter</a> in Javascript.</li>
-        <li><a href="http://demos.danielflower.com/JSBasic/Default.aspx">JSBasic</a> BASIC to JavaScript translator.
-        </li>
-        <li><a href="https://code.google.com/p/ipplesoftbasic/">ipplesoftbasic</a> a free BASIC interpreter written
-            entirely in JavaScript. It's cross-platform but is intended to specifically target the iPhone.</a></li>
-        <li><a href="http://www.runbasic.com/">RunBasic</a> commercial BASIC interpreter.</li>
-        <li><a href="http://eder.us/projects/jbasic/">JavaScript BASIC. It seems it doesn't work on Google
-                Chrome/Safari.</li>
-        <li><a href="http://stevehanov.ca/blog/index.php?id=92">qb.js</a> An implementation of QBASIC in Javascript</li>
-    </ul>
-    <script type="3f740b0dd8a300e3ab24496f-text/javascript">
-
-var interpreter = new Interpreter();
-
-function myclear()
-{
-	$("#outputtext").remove();
-	$("div#output").append('<pre id="outputtext"></pre>');
-}
-
-const inputform =  
- '<form id="inputform"><input type="text" id="inp" name="inp">' +
- '<input type="submit" value="ok"></form>' 
-;
-
-function my_string_input(p)
-{
-	$("#outputtext").append(inputform);
-$("#inp").focus();
-    $('#inputform').submit(function() {
-	var val = $("#inp").val();
-       	interpreter.push_input(val);
-	$("#inputform").remove();
-	$("#outputtext").append('<span class="inputtext"> '+val+'</span>');
-	try {
-       		interpreter.resume_input();
-	} catch(error) {
-		alert(error);
-	}
-        return false;
-      });
-
-	return null;
-}
-
-function my_number_input(p)
-{
-
-	$("#outputtext").append(inputform);
-$("#inp").focus();
-    $('#inputform').submit(function() {
-	var val = $("#inp").val();
-
-        var nval = parseFloat(val);
-
-        if (isNaN(nval)) {
-		alert("Invalid input (numeric input expected)");
-		return false;
-	}
-
-       	interpreter.push_input(parseFloat(val));
-	$("#inputform").remove();
-	$("#outputtext").append('<span class="inputtext"> '+val+'</span>');
-	try {
-       		interpreter.resume_input();
-	} catch(error) {
-		alert(error);
-	}
-       return false;
-      });
-
-	return null;
-}
-
-function myprint(text, eol)
-{
-	$("#outputtext").append(text);
-	if (eol)
- 		$("#outputtext").append("<br/>");
-}
-
-
-
-function runbasic(inp)
-{
-if (inp.hidecode.value==="on") {
-$("#source").hide("slow");
-$("#showsource").show();
-}
-	$("#outputtext").remove();
-	$("div#output").append('<pre id="outputtext"></pre>');
-
-	try {
-
-		var p = new Parser(inp.sourcecode.value);
-		p.parse();
-
-		interpreter.setParser(p);
-		interpreter.print_function = myprint;
-		interpreter.string_input_function = my_string_input;
-		interpreter.number_input_function = my_number_input;
-		interpreter.clear_function = myclear;
-		interpreter.interpret();
-		return false;
-	} catch (error) {
-		alert(error);
-		return false;
-	}
-}
-
-    $("#outputtext").delegate("form", "submit", function(){
-      alert("<p>Another paragraph!</p>");
-return false;
-    });
-
-function showsource(inp)
-{
-$("#source").show("slow");
-$("#showsource").hide();
-return false;
-}
-
-function togglehelp(inp)
-{
-if (inp.thelp.value==="Show Help") {
-$("#helptext").show();
-inp.thelp.value="Hide Help";
-} else {
-inp.thelp.value="Show Help";
-$("#helptext").hide();
-}
-return false;
-}
-
-
-$(document).ready(function() {
-$("#showsource").hide();
-$("#helptext").hide();
-});
-
-function copy_code(id)
-{
-a = $("#"+id).text();
- $("#sourcetext").val(a);
- $("#showhelptext").val("Show Help");
-$("#helptext").hide();
-return false;
-}
-
-</script>
+    <h1>Wescril Interpreter Online</h1>
     <h2>Help</h2>
     <div id="showhelp">
         <form id="showhelpform" name="help"
@@ -242,11 +94,11 @@ return false;
             data-cf-modified-3f740b0dd8a300e3ab24496f-=""><input name="cp" type="submit"
                 value="Copy To Source Code Box"></form>
         <pre id="p0" class="example">10 INPUT "What is your name?", NAME$
-20 INPUT "Input a number ", A
-30 FOR I=1 TO A
-40 PRINT "Hello "; NAME$
-50 NEXT I
-</pre>
+                20 INPUT "Input a number ", A
+                30 FOR I=1 TO A
+                40 PRINT "Hello "; NAME$
+                50 NEXT I
+            </pre>
         <h4>Reverse Phrase</h4>
         <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a> (unmodified source).</p>
         <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p1a');"
@@ -260,7 +112,7 @@ return false;
 60   PRINT LEFT$(RIGHT$(PHRASE$,LETTER),1);
 70 NEXT LETTER
 80 END
-</pre>
+        </pre>
         <h4>Armstrong Numbers</h4>
         <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a>.</p>
         <form name="help" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return copy_code('p1b');"
@@ -328,23 +180,82 @@ return false;
     </div>
     <h2>Source Code</h2>
     <div id="showsource">
-        <form name="basic" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return showsource(this);"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-="">
+        <form name="basic" onSubmit="return showsource(this);">
             <span><input name="show" type="submit" value="Show code"> </span>
         </form>
     </div>
     <div id="source" class="source">
-        <form name="basic" onSubmit="if (!window.__cfRLUnblockHandlers) return false; return runbasic(this);"
-            data-cf-modified-3f740b0dd8a300e3ab24496f-="">
+        <form name="basic" onSubmit="return runbasic(this);">
             <textarea id="sourcetext" name="sourcecode" rows="10" cols="80">
 10 INPUT "What is your name?", NAME$
 20 INPUT "Input a number ", A
 30 FOR I=1 TO A
 40 PRINT "Hello "; NAME$
 50 NEXT I
-</textarea><br />
+    </textarea>
+            <div id="container" style="width:900px;height:600px;border:1px solid grey"></div>
+
+            <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
+            <script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+            <script>
+                require.config({ paths: { 'vs': 'node_modules/monaco-editor/min/vs' } });
+
+                require(['vs/editor/editor.main'], function () {
+                    // Register wescril
+                    monaco.languages.register({ id: 'wescril' });
+
+                    // Register a tokens provider for wescril
+                    monaco.languages.setMonarchTokensProvider('wescril', {
+                        tokenizer: {
+                            root: [
+                                [/(PRINT|INPUT|FOR|TO|NEXT)/ig, "token-keyword"],
+                                [/(\'|REM).*/i, "token-comment"],
+                                [/[0-9]+/ig, "token-linenum"],
+                            ]
+                        }
+                    });
+
+                    // Define a new theme that contains only rules that match this language
+                    monaco.editor.defineTheme('myCoolTheme', {
+                        base: 'vs',
+                        inherit: false,
+                        rules: [
+                            { token: 'token-comment', foreground: '008800', fontStyle: 'italic' },
+                            { token: 'token-keyword', foreground: '0000ff', fontStyle: 'bold' },
+                            { token: 'token-linenum', foreground: '909090', fontStyle: 'bold' },
+                        ]
+                    });
+
+                    // Register a completion item provider for the new language
+                    monaco.languages.registerCompletionItemProvider('wescril', {
+                        provideCompletionItems: () => {
+                            var suggestions = [{
+                                label: 'PRINT',
+                                kind: monaco.languages.CompletionItemKind.Snippet,
+                                insertText: [
+                                    '10 PRINT "$1"'
+                                ].join('\n'),
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                documentation: 'PRINT snippet'
+                            }];
+                            return { suggestions: suggestions };
+                        }
+                    });
+                    var editor = monaco.editor.create(document.getElementById('container'), {
+                        value: [
+                            '10 INPUT "What is your name?", NAME$',
+                            '20 INPUT "Input a number ", A',
+                            '30 FOR I = 1 TO A',
+                            '40 PRINT "Hello "; NAME$',
+                            '50 NEXT I'
+                        ].join('\n'),
+                        theme: 'myCoolTheme',
+                        language: 'wescril'
+                    });
+                });
+            </script>
+            <br />
             <span id="execute">
-                <input checked type="checkbox" name="hidecode">Hide source code while executing
                 <input name="run" type="submit" value="Execute"> </span>
         </form>
     </div>
