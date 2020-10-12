@@ -15,112 +15,9 @@
 </head>
 
 <body>
-    <h1>Wescril Interpreter Online</h1>
-    <h2>Help</h2>
-    <div id="showhelp">
-        <form id="showhelpform" name="help" onSubmit="return togglehelp(this);"><input name="thelp" type="submit"
-                id="showhelptext" value="Show Help"></form>
-    </div>
-    <div id="helptext">
-        <h3>Keywords</h3>
-        <p>Although I haven't tested most of them, the following keywords should work:
-            <code>IF THEN ELSE FOR TO STEP GOTO GOSUB RETURN NEXT INPUT LET CLS END PRINT DIM DATA READ REM END OR AND MOD WHILE WEND RANDOMIZE SYSTEM CLEAR</code>.
-            Other keywords (<code>ON GOTO, ON GOSUB, ON ERROR, RESUME, etc</code>) are not implemented.
-            <code>PRINT</code> doesn't support <code>USING</code>.
-        </p>
-        <h3>Functions</h3>
-        <p>The following functions should work:
-            <code>VAL STR$ LEFT$ RIGHT$ MID$ LEN RND INT INSTR ABS ASC CHR$ SQR STRING$ SIN COS TAN TIMER</code>
-        </p>
-        <h3>Test Code</h3>
-        <p>Here are some code that you can run</p>
-        <h4>I/O Example</h4>
-        <p>Example to show how <code>INPUT</code> is displayed as HTML Form</p>
-        <form name="help" onSubmit="return copy_code('p0');">
-            <input name="cp" type="submit" value="Copy To Source Code Box"></form>
-        <pre id="p0" class="example">10 INPUT "What is your name?", NAME$
-20 INPUT "Input a number ", A
-30 FOR I=1 TO A
-40 PRINT "Hello "; NAME$
-50 NEXT I
-            </pre>
-        <h4>Reverse Phrase</h4>
-        <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a> (unmodified source).</p>
-        <form name="help" onSubmit="return copy_code('p1a');"><input name="cp" type="submit"
-                value="Copy To Source Code Box"></form>
-        <pre id="p1a" class="example">10 REM Reverse the letters of a phrase
-20 CLEAR :KEY OFF :CLS
-30 INPUT &quot;What is your phrase&quot;;PHRASE$
-40 PRINT :PRINT &quot;The phrase reversed: &quot;;
-50 FOR LETTER = 1 TO LEN(PHRASE$)
-60   PRINT LEFT$(RIGHT$(PHRASE$,LETTER),1);
-70 NEXT LETTER
-80 END
-        </pre>
-        <h4>Armstrong Numbers</h4>
-        <p>Taken from <a href="http://glind.customer.netspace.net.au/gw-basic.html">here</a>.</p>
-        <form name="help" onSubmit="return copy_code('p1b');" data-cf-modified- -=""><input name="cp" type="submit"
-                value="Copy To Source Code Box"></form>
-        <pre id="p1b" class="example">10 ' PROGRAM Armstrong Numbers
-20 CLS
-30 PRINT &quot;ARMSTRONG NUMBERS&quot; :PRINT
-40 PRINT &quot;Program computes all Armstrong numbers in the range of 0 - 999.&quot;
-50 PRINT &quot;An Armstrong number is a number such that the sum of its digits&quot;
-60 PRINT &quot;raised to the third power is equal to the number itself.&quot; :PRINT
-70 '
-80 '   A, B, C                             the three digits
-90 '   ABC, A3B3C3                         the number and its cubic sum
-100 '   COUNT                              a counter
-110 '
-120 A=0: B=0: C=0: COUNT=0                 'initialise
-130 FOR A = 0 TO 9                         'for the left most digita
-140   FOR B = 0 TO 9                       'for the middle digit
-150     FOR C = 0 TO 9                     'for the right most digit
-160       ABC = A*100 + B*10 + C           'the number
-170       A3B3C3 = A^3 + B^3 + C^3         'the sum of cubes
-180       IF ABC = A3B3C3 THEN GOSUB 230   'if they are equal
-190     NEXT C
-200   NEXT B
-210 NEXT A
-220 END
-230 ' Display results subroutine
-240 COUNT = COUNT + 1                      'count the Armstrongs
-250 PRINT &quot;Armstrong number&quot;; COUNT;&quot;: &quot;; ABC
-260 RETURN
-
-</pre>
-        <h4>99 Bottles of beer</h4>
-        <p>Slightly modified from <a href="http://99-bottles-of-beer.net/language-apple-1-basic-1720.html">basic version
-                for apple 1 basic</a> (I changed # to &lt;&gt;).</p>
-        <form name="help" onSubmit="return copy_code('p2');" data-cf-modified- -=""><input name="cp" type="submit"
-                value="Copy To Source Code Box"></form>
-        <pre id="p2" class="example">1 REM A SUBSTANTIAL PART TAKEN
-2 REM FROM THE BASIC EXAMPLE.
-3 REM FIXED S GRAMMAR AND 
-4 REM FORMATED TO FIT APPLE 1
-5 REM SCREEN
-6 REM
-7 REM PROGRAMED ON THE APPLE 1
-8 REM REPLICA BY VINCE BRIEL.
-9 REM 
-10 FOR X=99 TO 1 STEP -1
-20 Y=X-1
-30 PRINT X;&quot; BOTTLE&quot;;
-40 IF X&lt;&gt;1 THEN PRINT &quot;S&quot;;
-50 PRINT &quot; OF BEER ON THE WALL,&quot;
-60 PRINT X;&quot; BOTTLE&quot;;
-70 IF X&lt;&gt;1 THEN PRINT &quot;S&quot;;
-80 PRINT &quot; OF BEER&quot;
-90 PRINT &quot;TAKE ONE DOWN AND PASS IT AROUND,&quot;
-100 PRINT X-1;&quot; BOTTLE&quot;;
-110 IF Y&lt;&gt;1 THEN PRINT &quot;S&quot;;
-120 PRINT &quot; OF BEER ON THE WALL&quot;
-130 PRINT &quot;&quot;
-140 NEXT X
-150 END
-</pre>
-    </div>
-    <h2>Source Code</h2>
+    <h1 class="heading-jsans">Wescril Interpreter Online</h1>
+    <hr>
+    <h2>Source Code Editor</h2>
     <div id="showsource">
         <form name="basic" onSubmit="return showsource(this);">
             <span><input name="show" type="submit" value="Show code"> </span>
@@ -150,9 +47,11 @@
                     monaco.languages.setMonarchTokensProvider('wescril', {
                         tokenizer: {
                             root: [
-                                [/(PRINT|INPUT|FOR|TO|NEXT)/ig, "token-keyword"],
+                                [/(PRINT|INPUT|FOR|TO|NEXT|IF|ELSE|AS|USING|DIM)/ig, "token-keyword"],
                                 [/(\'|REM).*/i, "token-comment"],
                                 [/[0-9]+/ig, "token-linenum"],
+                                [/(\").*.(\")/ig, "token-string"],
+                                [/(\$)/ig, "token-variable"],
                             ]
                         }
                     });
@@ -165,6 +64,8 @@
                             { token: 'token-comment', foreground: '008800', fontStyle: 'italic' },
                             { token: 'token-keyword', foreground: '0000ff', fontStyle: 'bold' },
                             { token: 'token-linenum', foreground: '909090', fontStyle: 'bold' },
+                            { token: 'token-string', foreground: '7a2121'},
+                            { token: 'token-variable', foreground: '7a2121' },
                         ]
                     });
 
@@ -183,6 +84,8 @@
                             return { suggestions: suggestions };
                         }
                     });
+
+                    // Create editor
                     var editor = monaco.editor.create(document.getElementById('container'), {
                         value: [
                             '10 INPUT "What is your name?", NAME$',
