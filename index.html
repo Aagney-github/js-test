@@ -51,7 +51,7 @@
                                 [/(\'|REM).*/i, "token-comment"],
                                 [/[0-9]+/ig, "token-linenum"],
                                 [/(\").*.(\")/ig, "token-string"],
-                                [/(\$)/ig, "token-variable"],
+                                [/a-zA-Z(\$)/ig, "token-variable"],
                             ]
                         }
                     });
